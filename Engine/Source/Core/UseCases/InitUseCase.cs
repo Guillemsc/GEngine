@@ -3,6 +3,7 @@ using GEngine.Modules.EditorRenderer.UseCases;
 using GEngine.Modules.Logging.UseCases;
 using GEngine.Modules.Physics2d.UseCases;
 using GEngine.Modules.Rendering.UseCases;
+using GEngine.Modules.Resources.UseCases;
 using GEngine.Modules.Windows.UseCases;
 using GEngine.Utils.Logging.Enums;
 

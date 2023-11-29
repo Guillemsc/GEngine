@@ -4,7 +4,10 @@ namespace GEngine.Modules.Entities.Interactors;
 
 public interface IEntitiesInteractor
 {
-    Entity Create(string name, bool active = true);
-    Entity Create(string name, Entity parent, bool active = true);
+    WorldEntity CreateWorld(string name, bool active = true);
+    WorldEntity CreateWorld(string name, WorldEntity parent, bool active = true);
+
+    UiEntity CreateUi(string name, bool active = true);
+    
     void DestroyAllActive();
 }

@@ -39,13 +39,13 @@ public sealed class Pong2dExampleGameRunner : GameRunner
     readonly IAsyncTaskRunner _asyncTaskRunner;
     
     Camera2dComponent? _camera2dComponent;
-    Entity? _topWall;
-    Entity? _bottomWall;
-    Entity? _leftWall;
-    Entity? _rightWall;
-    Entity? _leftPlayer;
-    Entity? _rightPlayer;
-    Entity? _ball;
+    WorldEntity? _topWall;
+    WorldEntity? _bottomWall;
+    WorldEntity? _leftWall;
+    WorldEntity? _rightWall;
+    WorldEntity? _leftPlayer;
+    WorldEntity? _rightPlayer;
+    WorldEntity? _ball;
 
     Vector2 _ballDirection;
     bool _ballCanMove;
@@ -80,7 +80,7 @@ public sealed class Pong2dExampleGameRunner : GameRunner
 
     void CreateCamera()
     {
-        Entity cameraEntity = Engine.Entities.Create("Camera");
+        WorldEntity cameraEntity = Engine.Entities.CreateWorld("Camera");
         _camera2dComponent = cameraEntity.AddComponent<Camera2dComponent>();
         
         _camera2dComponent!.SetClearColor(BackgroundColor);
@@ -89,12 +89,12 @@ public sealed class Pong2dExampleGameRunner : GameRunner
 
     void CreateField()
     {
-        Entity fieldEntity = Engine.Entities.Create("Field");
+        WorldEntity fieldEntity = Engine.Entities.CreateWorld("Field");
         
-        _leftWall = Engine.Entities.Create("LeftWall", fieldEntity);
-        _rightWall = Engine.Entities.Create("RightWall", fieldEntity);
-        _topWall = Engine.Entities.Create("TopWall", fieldEntity);
-        _bottomWall = Engine.Entities.Create("BottomWall", fieldEntity);
+        _leftWall = Engine.Entities.CreateWorld("LeftWall", fieldEntity);
+        _rightWall = Engine.Entities.CreateWorld("RightWall", fieldEntity);
+        _topWall = Engine.Entities.CreateWorld("TopWall", fieldEntity);
+        _bottomWall = Engine.Entities.CreateWorld("BottomWall", fieldEntity);
 
         _leftWall.Transform.SetLocalPositionXY(new Vector2(-HalfFieldSize.X, 0));
         BoxRenderer2dComponent leftWallRenderer = _leftWall.AddComponent<BoxRenderer2dComponent>();
@@ -131,8 +131,8 @@ public sealed class Pong2dExampleGameRunner : GameRunner
 
     void CreatePlayers()
     {
-        _leftPlayer = Engine.Entities.Create("Left Player");
-        _rightPlayer = Engine.Entities.Create("Right Player");
+        _leftPlayer = Engine.Entities.CreateWorld("Left Player");
+        _rightPlayer = Engine.Entities.CreateWorld("Right Player");
         
         _leftPlayer.Transform.SetLocalPositionXY(new Vector2(-HalfFieldSize.X * PlayerHorizontalPositionFieldSizeMultiplier, 0));
         BoxRenderer2dComponent _leftPlayerRenderer = _leftPlayer.AddComponent<BoxRenderer2dComponent>();
@@ -153,7 +153,7 @@ public sealed class Pong2dExampleGameRunner : GameRunner
 
     void CreateBall()
     {
-        _ball = Engine.Entities.Create("Ball");
+        _ball = Engine.Entities.CreateWorld("Ball");
         _ball.Transform.SetLocalPositionXY(new Vector2(0, 0));
         CircleRenderer2dComponent _ballRenderer = _ball.AddComponent<CircleRenderer2dComponent>();
         _ballRenderer.SetRadius(BallRadius);
@@ -282,7 +282,7 @@ public sealed class Pong2dExampleGameRunner : GameRunner
 
     void WhenBallCollidedWithPlayer(bool isLeftPlayer)
     {
-        Entity player = isLeftPlayer ? _leftPlayer! : _rightPlayer!;
+        WorldEntity player = isLeftPlayer ? _leftPlayer! : _rightPlayer!;
 
         float topPosition = player.Transform.WorldPosition.Y + PlayerHalfSize.Y;
         float bottomPosition = player.Transform.WorldPosition.Y - PlayerHalfSize.Y;

@@ -18,10 +18,10 @@ public sealed class PhysicsExampleGameRunner : GameRunner
     readonly IRandomGenerator _randomGenerator = new SeedRandomGenerator(1);
     readonly ITimer _spawnTimer = StopwatchTimer.FromStarted();
     
-    Entity? _entity1;
-    Entity? _entity2;
-    Entity? _entity3;
-    Entity? _entity4;
+    WorldEntity? _entity1;
+    WorldEntity? _entity2;
+    WorldEntity? _entity3;
+    WorldEntity? _entity4;
 
     PhysicsBoxFixture2d _physicsFixture2d;
     
@@ -31,10 +31,10 @@ public sealed class PhysicsExampleGameRunner : GameRunner
 
     public override void Start()
     {
-        _entity1 = Entities.Create("1");
-        _entity2 = Entities.Create("2");
-        _entity3 = Entities.Create("3");
-        _entity4 = Entities.Create("4");
+        _entity1 = Entities.CreateWorld("1");
+        _entity2 = Entities.CreateWorld("2");
+        _entity3 = Entities.CreateWorld("3");
+        _entity4 = Entities.CreateWorld("4");
         
         PhysicsBody2dComponent pb1 = _entity1.AddComponent<PhysicsBody2dComponent>();
         pb1.CreateBox(new Vector2(100, 100));

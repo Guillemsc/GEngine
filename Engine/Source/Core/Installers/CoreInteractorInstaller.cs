@@ -8,7 +8,9 @@ using GEngine.Modules.Logging.Interactors;
 using GEngine.Modules.Modes.Interactors;
 using GEngine.Modules.Physics2d.Interactors;
 using GEngine.Modules.Rendering.Interactor;
+using GEngine.Modules.Resources.Interactors;
 using GEngine.Modules.Tickables.Interactors;
+using GEngine.Modules.UiRenderer.Interactors;
 using GEngine.Modules.Windows.Interactors;
 using GEngine.Utils.Di.Builder;
 
@@ -29,7 +31,9 @@ public static class CoreInteractorInstaller
                 c.Resolve<ITickablesInteractor>(),
                 c.Resolve<IEntitiesInteractor>(),
                 c.Resolve<IPhysics2dInteractor>(),
+                c.Resolve<IUiRendererInteractor>(),
                 c.Resolve<IGuizmoRenderer2dInteractor>(),
+                c.Resolve<IResourcesInteractor>(),
                 c.Resolve<IGamesInteractor>()
             ));
     }

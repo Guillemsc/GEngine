@@ -3,6 +3,7 @@ using GEngine.Modules.Cameras.Interactors;
 using GEngine.Modules.Cameras.UseCases;
 using GEngine.Utils.Di.Builder;
 using GEngine.Modules.Rendering.UseCases;
+using GEngine.Modules.Windows.UseCases;
 
 namespace GEngine.Modules.Cameras.Installers;
 
@@ -32,7 +33,8 @@ public static class CamerasInstaller
 
         builder.Bind<GetActiveCamera2dOrDefaultUseCase>()
             .FromFunction(c => new GetActiveCamera2dOrDefaultUseCase(
-                c.Resolve<ActiveCamerasData>()
+                c.Resolve<ActiveCamerasData>(),
+                c.Resolve<GetWindowSizeUseCase>()
             ));
 
         builder.Bind<SetActiveCamera2dUseCase>()

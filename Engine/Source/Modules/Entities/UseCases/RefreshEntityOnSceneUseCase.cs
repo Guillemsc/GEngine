@@ -6,33 +6,37 @@ namespace GEngine.Modules.Entities.UseCases;
 
 public sealed class RefreshEntityOnSceneUseCase
 {
-    readonly SceneEntitiesData _sceneEntitiesData;
     readonly RefreshEntityOnActiveEntitiesListsUseCase _refreshEntityOnActiveEntitiesListsUseCase;
+    readonly GetSceneDataForEntityTypeUseCase _getSceneDataForEntityTypeUseCase;
 
     public RefreshEntityOnSceneUseCase(
-        SceneEntitiesData sceneEntitiesData, 
-        RefreshEntityOnActiveEntitiesListsUseCase refreshEntityOnActiveEntitiesListsUseCase
+        RefreshEntityOnActiveEntitiesListsUseCase refreshEntityOnActiveEntitiesListsUseCase,
+        GetSceneDataForEntityTypeUseCase getSceneDataForEntityTypeUseCase
         )
     {
-        _sceneEntitiesData = sceneEntitiesData;
         _refreshEntityOnActiveEntitiesListsUseCase = refreshEntityOnActiveEntitiesListsUseCase;
+        _getSceneDataForEntityTypeUseCase = getSceneDataForEntityTypeUseCase;
     }
     
-    public void Execute(Entity entity)
+    public void Execute(IEntity entity)
     {
-        bool alreadyOnScene = _sceneEntitiesData.SceneEntities.Contains(entity);
+        Type type = entity.GetType();
+
+        EntitiesSceneData entitiesSceneData = _getSceneDataForEntityTypeUseCase.Execute(type);
+        
+        bool alreadyOnScene = entitiesSceneData.SceneEntities.Contains(entity);
 
         bool needsToBeAdded = !alreadyOnScene && entity.IsOnScene;
         bool needsToBeRemoved = alreadyOnScene && !entity.IsOnScene;
 
         if (needsToBeAdded)
         {
-            _sceneEntitiesData.SceneEntities.Add(entity);
+            entitiesSceneData.SceneEntities.Add(entity);
         }
         
         if (needsToBeRemoved)
         {
-            _sceneEntitiesData.SceneEntities.Remove(entity);
+            entitiesSceneData.SceneEntities.Remove(entity);
         }
         
         _refreshEntityOnActiveEntitiesListsUseCase.Execute(entity);

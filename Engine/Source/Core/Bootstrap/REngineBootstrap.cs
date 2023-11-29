@@ -22,6 +22,8 @@ using GEngine.Modules.Modes.Installers;
 using GEngine.Modules.Physics2d.Installers;
 using GEngine.Modules.Renderer2d.Installers;
 using GEngine.Modules.Rendering.Installers;
+using GEngine.Modules.Resources.Installers;
+using GEngine.Modules.UiRenderer.Installers;
 
 namespace GEngine.Core.Bootstrap;
 
@@ -43,11 +45,13 @@ public static class REngineBootstrap
             b.InstallTickables();
             b.InstallCameras();
             b.InstallRendering();
+            b.InstallUiRenderer();
             b.InstallRenderer2d();
             b.InstallGuizmoRenderer2d();
             b.InstallEditorRenderer();
             b.InstallPhysics2d();
             b.InstallEntities();
+            b.InstallResources();
             
             b.InstallGames();
             

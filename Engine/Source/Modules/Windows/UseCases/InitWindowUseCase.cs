@@ -1,4 +1,6 @@
+using System.Numerics;
 using GEngine.Modules.Logging.UseCases;
+using GEngine.Modules.Windows.Data;
 using GEngine.Utils.Logging.Enums;
 using Raylib_cs;
 
@@ -6,12 +8,15 @@ namespace GEngine.Modules.Windows.UseCases;
 
 public sealed class InitWindowUseCase
 {
+    readonly WindowSizeData _windowSizeData;
     readonly GetLoggerUseCase _getLoggerUseCase;
 
     public InitWindowUseCase(
+        WindowSizeData windowSizeData,
         GetLoggerUseCase getLoggerUseCase
         )
     {
+        _windowSizeData = windowSizeData;
         _getLoggerUseCase = getLoggerUseCase;
     }
 
@@ -29,5 +34,9 @@ public sealed class InitWindowUseCase
         Raylib.SetWindowState(ConfigFlags.FLAG_WINDOW_ALWAYS_RUN);
         
         Raylib.InitWindow(width, height, title);
+        
+        float screenWidth = Raylib.GetScreenWidth();       
+        float screenHeight = Raylib.GetScreenHeight();
+        _windowSizeData.WindowSize = new Vector2(screenWidth, screenHeight);
     }
 }

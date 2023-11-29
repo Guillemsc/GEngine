@@ -7,7 +7,9 @@ using GEngine.Modules.Logging.Interactors;
 using GEngine.Modules.Modes.Interactors;
 using GEngine.Modules.Physics2d.Interactors;
 using GEngine.Modules.Rendering.Interactor;
+using GEngine.Modules.Resources.Interactors;
 using GEngine.Modules.Tickables.Interactors;
+using GEngine.Modules.UiRenderer.Interactors;
 using GEngine.Modules.Windows.Interactors;
 
 namespace GEngine.Core.Interactors;
@@ -23,7 +25,9 @@ public sealed class REngineInteractor : IREngineInteractor
     public ITickablesInteractor Tickables { get; }
     public IEntitiesInteractor Entities { get; }
     public IPhysics2dInteractor Physics2d { get; }
+    public IUiRendererInteractor UiRenderer { get; }
     public IGuizmoRenderer2dInteractor GuizmoRenderer2d { get; }
+    public IResourcesInteractor Resources { get; }
     public IGamesInteractor Games { get; }
 
     public REngineInteractor(
@@ -36,7 +40,9 @@ public sealed class REngineInteractor : IREngineInteractor
         ITickablesInteractor tickables, 
         IEntitiesInteractor entities,
         IPhysics2dInteractor physics2d,
+        IUiRendererInteractor uiRenderer,
         IGuizmoRenderer2dInteractor guizmoRenderer2d,
+        IResourcesInteractor resources,
         IGamesInteractor games
         )
     {
@@ -49,7 +55,9 @@ public sealed class REngineInteractor : IREngineInteractor
         Tickables = tickables;
         Entities = entities;
         Physics2d = physics2d;
+        UiRenderer = uiRenderer;
         GuizmoRenderer2d = guizmoRenderer2d;
+        Resources = resources;
         Games = games;
     }
 }

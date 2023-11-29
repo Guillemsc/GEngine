@@ -1,10 +1,12 @@
 using System.Numerics;
+using GEngine.Utils.Events;
 
 namespace GEngine.Modules.Windows.Interactors;
 
 public interface IWindowsInteractor
 {
-    void ShowWindow(int width, int height, string title);
+    IListenEvent<Vector2> WindowSizeChangedEvent { get; }
+    
     bool IsCloseWindowRequested();
     Vector2 GetScreenSize();
 }

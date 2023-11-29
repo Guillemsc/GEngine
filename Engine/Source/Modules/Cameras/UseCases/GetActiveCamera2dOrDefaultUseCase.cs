@@ -1,19 +1,22 @@
 using System.Numerics;
 using GEngine.Modules.Cameras.Data;
 using GEngine.Modules.Cameras.Objects;
-using Raylib_cs;
+using GEngine.Modules.Windows.UseCases;
 
 namespace GEngine.Modules.Cameras.UseCases;
 
 public sealed class GetActiveCamera2dOrDefaultUseCase
 {
     readonly ActiveCamerasData _activeCamerasData;
+    readonly GetWindowSizeUseCase _getWindowSizeUseCase;
 
     public GetActiveCamera2dOrDefaultUseCase(
-        ActiveCamerasData activeCamerasData
+        ActiveCamerasData activeCamerasData, 
+        GetWindowSizeUseCase getWindowSizeUseCase
         )
     {
         _activeCamerasData = activeCamerasData;
+        _getWindowSizeUseCase = getWindowSizeUseCase;
     }
 
     public Camera2d Execute()
@@ -22,10 +25,9 @@ public sealed class GetActiveCamera2dOrDefaultUseCase
 
         if (!hasActiveCamera)
         {
-            float width = Raylib.GetScreenWidth();       
-            float height = Raylib.GetScreenHeight();
+            Vector2 windowSize = _getWindowSizeUseCase.Execute();
         
-            _activeCamerasData.DefaultCamera2d.SetOffset(new Vector2(width * 0.5f, height * 0.5f));
+            _activeCamerasData.DefaultCamera2d.SetOffset(new Vector2(windowSize.X * 0.5f, windowSize.Y * 0.5f));
         
             return _activeCamerasData.DefaultCamera2d;   
         }

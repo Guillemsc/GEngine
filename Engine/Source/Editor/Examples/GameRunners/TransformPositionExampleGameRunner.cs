@@ -9,9 +9,9 @@ namespace GEngine.Editor.Examples.GameRunners
 {
     public class TransformPositionExampleGameRunner : GameRunner
     {
-        Entity? _entity1;
-        Entity? _entity2;
-        Entity? _entity3;
+        WorldEntity? _entity1;
+        WorldEntity? _entity2;
+        WorldEntity? _entity3;
 
         
         public TransformPositionExampleGameRunner(IREngineInteractor engine) : base(engine)
@@ -21,9 +21,9 @@ namespace GEngine.Editor.Examples.GameRunners
 
         public override void Start()
         {
-            _entity1 = Entities.Create("1");
-            _entity2 = Entities.Create("2");
-            _entity3 = Entities.Create("3");
+            _entity1 = Entities.CreateWorld("1");
+            _entity2 = Entities.CreateWorld("2");
+            _entity3 = Entities.CreateWorld("3");
 
             CircleRenderer2dComponent circle1 = _entity1.AddComponent<CircleRenderer2dComponent>();
             circle1.SetColor(Color.PINK);

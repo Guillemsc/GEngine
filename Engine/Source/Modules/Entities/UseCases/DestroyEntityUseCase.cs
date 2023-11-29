@@ -4,13 +4,13 @@ namespace GEngine.Modules.Entities.UseCases;
 
 public sealed class DestroyEntityUseCase
 {
-    public void Execute(Entity entity)
+    public void Execute(IEntity entity)
     {
         entity.SetActive(false);
 
-        List<Entity> entitiesToDestroy = entity.GetChildEntitiesOnHierarchy(false).ToList();
+        List<IEntity> entitiesToDestroy = entity.GetChildEntitiesOnHierarchy(false).ToList();
 
-        foreach (Entity entityToDestroy in entitiesToDestroy)
+        foreach (IEntity entityToDestroy in entitiesToDestroy)
         {
             DestroyEntity(entityToDestroy);
         }
@@ -18,7 +18,7 @@ public sealed class DestroyEntityUseCase
         DestroyEntity(entity);
     }
     
-    void DestroyEntity(Entity entityToDestroy)
+    void DestroyEntity(IEntity entityToDestroy)
     {
         entityToDestroy.Name = $"{entityToDestroy.Name} [Destroyed]";
         entityToDestroy.RemoveAllComponents();

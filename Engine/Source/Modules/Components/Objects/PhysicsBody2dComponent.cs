@@ -9,7 +9,7 @@ using GEngine.Utils.Extensions;
 
 namespace GEngine.Modules.Components.Objects;
 
-public sealed class PhysicsBody2dComponent : Component, INotifyTransformChanged
+public sealed class PhysicsBody2dComponent : WorldComponent, INotifyTransformChanged
 {
     readonly List<PhysicsFixture2d> _fixtures = new();
     
@@ -22,7 +22,7 @@ public sealed class PhysicsBody2dComponent : Component, INotifyTransformChanged
     public event Action<PhysicsBody2dComponent, PhysicsBody2dComponent>? OnCollisionStay;
     public event Action<PhysicsBody2dComponent, PhysicsBody2dComponent>? OnCollisionEnd;
     
-    public PhysicsBody2dComponent(IREngineInteractor engine, Guid uid, Entity owner) : base(engine, uid, owner)
+    public PhysicsBody2dComponent(IREngineInteractor engine, Guid uid, BaseEntity<WorldComponent> owner) : base(engine, uid, owner)
     {
     }
 

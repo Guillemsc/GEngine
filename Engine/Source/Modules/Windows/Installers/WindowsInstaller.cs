@@ -1,4 +1,5 @@
 using GEngine.Modules.Logging.UseCases;
+using GEngine.Modules.Windows.Data;
 using GEngine.Modules.Windows.Interactors;
 using GEngine.Modules.Windows.UseCases;
 using GEngine.Utils.Di.Builder;
@@ -11,14 +12,23 @@ public static class WindowsInstaller
     {
         builder.Bind<IWindowsInteractor>()
             .FromFunction(c => new WindowsInteractor(
-                c.Resolve<InitWindowUseCase>(),
+                c.Resolve<WindowEventsData>(),
                 c.Resolve<IsCloseWindowRequestedUseCase>(),
                 c.Resolve<GetWindowSizeUseCase>()
             ));
+
+        builder.Bind<WindowSizeData>().FromNew();
+        builder.Bind<WindowEventsData>().FromNew();
         
         builder.Bind<InitWindowUseCase>()
             .FromFunction(c => new InitWindowUseCase(
+                c.Resolve<WindowSizeData>(),
                 c.Resolve<GetLoggerUseCase>()    
+            ));
+
+        builder.Bind<TickWindowsUseCase>()
+            .FromFunction(c => new TickWindowsUseCase(
+                c.Resolve<TickWindowSizeChangeCheckUseCase>()
             ));
 
         builder.Bind<CloseWindowUseCase>()
@@ -30,8 +40,16 @@ public static class WindowsInstaller
             .FromFunction(c => new IsCloseWindowRequestedUseCase(
             ));
 
+        builder.Bind<TickWindowSizeChangeCheckUseCase>()
+            .FromFunction(c => new TickWindowSizeChangeCheckUseCase(
+                c.Resolve<WindowSizeData>(),
+                c.Resolve<WindowEventsData>()
+            ));
+
         builder.Bind<GetWindowSizeUseCase>()
-            .FromFunction(c => new GetWindowSizeUseCase());
+            .FromFunction(c => new GetWindowSizeUseCase(
+                c.Resolve<WindowSizeData>()
+            ));
         
         builder.Bind<GetMSAAEnabledUseCase>()
             .FromFunction(c => new GetMSAAEnabledUseCase());

@@ -6,20 +6,23 @@ namespace GEngine.Modules.Entities.UseCases;
 
 public sealed class TickActiveEntitiesUseCase
 {
-    readonly SceneEntitiesData _sceneEntitiesData;
+    readonly SceneData _sceneData;
 
     public TickActiveEntitiesUseCase(
-        SceneEntitiesData sceneEntitiesData
+        SceneData sceneData
         )
     {
-        _sceneEntitiesData = sceneEntitiesData;
+        _sceneData = sceneData;
     }
 
     public void Execute()
     {
-        foreach (Entity entity in _sceneEntitiesData.SceneEntities)
+        foreach (EntitiesSceneData entitiesSceneData in _sceneData.SceneDataByEntityType.Values)
         {
-            entity.Tick();
+            foreach (IEntity entity in entitiesSceneData.SceneActiveEntities)
+            {
+                entity.Tick();
+            }
         }
     }
 }

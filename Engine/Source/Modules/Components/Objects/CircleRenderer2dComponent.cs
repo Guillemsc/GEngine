@@ -6,7 +6,7 @@ using GEngine.Utils.Extensions;
 
 namespace GEngine.Modules.Components.Objects;
 
-public sealed class CircleRenderer2dComponent : Component
+public sealed class CircleRenderer2dComponent : WorldComponent
 {
     public int SortingOrder { get; private set; }
 
@@ -14,7 +14,7 @@ public sealed class CircleRenderer2dComponent : Component
     public float Radius { get; private set; } = 10f;
     public Color Color { get; private set; } = Color.PINK;
     
-    public CircleRenderer2dComponent(IREngineInteractor engine, Guid uid, Entity owner) : base(engine, uid, owner)
+    public CircleRenderer2dComponent(IREngineInteractor engine, Guid uid, BaseEntity<WorldComponent> owner) : base(engine, uid, owner)
     {
         
     }

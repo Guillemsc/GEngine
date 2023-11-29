@@ -26,7 +26,7 @@ public static class HierarchyEditorInstaller
         builder.Bind<RenderHierarchyEditorUseCase>()
             .FromFunction(c => new RenderHierarchyEditorUseCase(
                 c.Resolve<HierarchyEditorData>(),
-                c.Resolve<GetRootActiveEntitiesUseCase>()
+                c.Resolve<GetRootSceneActiveEntitiesUseCase>()
             ))
             .LinkEditorRenderer(o => o.Execute);
     }

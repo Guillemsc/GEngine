@@ -10,9 +10,9 @@ namespace GEngine.Editor.Examples.GameRunners;
 
 public sealed class TransformScaleExampleGameRunner : GameRunner
 {
-    Entity? _box1Entity;
-    Entity? _box2Entity;
-    Entity? _box3Entity;
+    WorldEntity? _box1Entity;
+    WorldEntity? _box2Entity;
+    WorldEntity? _box3Entity;
     
     public TransformScaleExampleGameRunner(IREngineInteractor engine) : base(engine)
     {
@@ -20,7 +20,7 @@ public sealed class TransformScaleExampleGameRunner : GameRunner
 
     public override void Start()
     {
-        _box1Entity = Entities.Create("Box1");
+        _box1Entity = Entities.CreateWorld("Box1");
         _box1Entity.Transform.SetWorldPosition(new Vector3(-100, 0, 0));
         _box1Entity.Transform.SetLocalScale(new Vector3(1, 1, 1));
         BoxRenderer2dComponent box1 = _box1Entity.AddComponent<BoxRenderer2dComponent>();
@@ -29,7 +29,7 @@ public sealed class TransformScaleExampleGameRunner : GameRunner
         pb1.SetType(PhysicsBody2dType.Kinematic);
         box1.SetSortingOrder(2);
         
-        _box2Entity = Entities.Create("Box2");
+        _box2Entity = Entities.CreateWorld("Box2");
         _box2Entity.SetParent(_box1Entity);
         _box2Entity.Transform.SetWorldPosition(new Vector3(0, 0, 0));
         _box2Entity.Transform.SetLocalScale(new Vector3(2, 2, 1));
@@ -39,7 +39,7 @@ public sealed class TransformScaleExampleGameRunner : GameRunner
         pb2.CreateBox(new Vector2(20, 20));
         pb2.SetType(PhysicsBody2dType.Kinematic);
         
-        _box3Entity = Entities.Create("Box3");
+        _box3Entity = Entities.CreateWorld("Box3");
         _box3Entity.SetParent(_box2Entity);
         _box3Entity.Transform.SetWorldPosition(new Vector3(100, 0, 0));
         _box3Entity.Transform.SetLocalScale(new Vector3(3, 3, 1));

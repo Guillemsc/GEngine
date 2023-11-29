@@ -13,4 +13,8 @@
       <PackageReference Include="Raylib-cs" Version="5.0.0" />
       <PackageReference Include="rlImgui-cs" Version="2.0.0" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Modules\Fonts\Objects\" />
+    </ItemGroup>
 </Project>

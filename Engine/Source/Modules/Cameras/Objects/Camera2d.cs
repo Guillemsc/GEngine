@@ -7,6 +7,7 @@ namespace GEngine.Modules.Cameras.Objects;
 public sealed class Camera2d
 {
     public Color ClearColor { get; private set; } = Color.WHITE;
+    public float Size { get; private set; }
     
     Camera2D _camera = new(
         Vector2.Zero,
@@ -32,7 +33,8 @@ public sealed class Camera2d
 
     public void SetSize(float size)
     {
-        _camera.Zoom = MathExtensions.Divide(1f, size);
+        Size = size;
+        _camera.Zoom = MathExtensions.Divide(1f, Size);
     }
 
     public void SetClearColor(Color color)

@@ -1,26 +1,28 @@
 using System.Numerics;
+using GEngine.Modules.Windows.Data;
 using GEngine.Modules.Windows.UseCases;
+using GEngine.Utils.Events;
 
 namespace GEngine.Modules.Windows.Interactors;
 
 public sealed class WindowsInteractor : IWindowsInteractor
 {
-    readonly InitWindowUseCase _initWindowUseCase;
+    readonly WindowEventsData _windowEventsData;
     readonly IsCloseWindowRequestedUseCase _isCloseWindowRequestedUseCase;
     readonly GetWindowSizeUseCase _getWindowSizeUseCase;
 
+    public IListenEvent<Vector2> WindowSizeChangedEvent => _windowEventsData.WindowSizeChangedEvent;
+    
     public WindowsInteractor(
-        InitWindowUseCase initWindowUseCase, 
+        WindowEventsData windowEventsData,
         IsCloseWindowRequestedUseCase isCloseWindowRequestedUseCase, 
-        GetWindowSizeUseCase getWindowSizeUseCase
-        )
+        GetWindowSizeUseCase getWindowSizeUseCase)
     {
-        _initWindowUseCase = initWindowUseCase;
+        _windowEventsData = windowEventsData;
         _isCloseWindowRequestedUseCase = isCloseWindowRequestedUseCase;
         _getWindowSizeUseCase = getWindowSizeUseCase;
     }
-
-    public void ShowWindow(int width, int height, string title) => _initWindowUseCase.Execute(width, height, title);
+    
     public bool IsCloseWindowRequested() => _isCloseWindowRequestedUseCase.Execute();
     public Vector2 GetScreenSize() => _getWindowSizeUseCase.Execute();
 }

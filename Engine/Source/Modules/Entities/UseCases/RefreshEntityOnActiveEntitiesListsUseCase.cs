@@ -5,44 +5,50 @@ namespace GEngine.Modules.Entities.UseCases;
 
 public sealed class RefreshEntityOnActiveEntitiesListsUseCase
 {
-    readonly SceneEntitiesData _sceneEntitiesData;
+    readonly GetSceneDataForEntityTypeUseCase _getSceneDataForEntityTypeUseCase;
 
-    public RefreshEntityOnActiveEntitiesListsUseCase(SceneEntitiesData sceneEntitiesData)
+    public RefreshEntityOnActiveEntitiesListsUseCase(
+        GetSceneDataForEntityTypeUseCase getSceneDataForEntityTypeUseCase
+        )
     {
-        _sceneEntitiesData = sceneEntitiesData;
+        _getSceneDataForEntityTypeUseCase = getSceneDataForEntityTypeUseCase;
     }
 
-    public void Execute(Entity entity)
+    public void Execute(IEntity entity)
     {
-        bool isOnSceneActiveEntitiesList = _sceneEntitiesData.SceneActiveEntities.Contains(entity);
-        bool isOnSceneRootEntitiesList = _sceneEntitiesData.RootSceneEntities.Contains(entity);
+        Type type = entity.GetType();
 
-        bool shouldBeAddedToSceneActiveEntitiesList = entity is { ActiveInHierachy: true, IsOnScene: true } && !isOnSceneActiveEntitiesList;
+        EntitiesSceneData entitiesSceneData = _getSceneDataForEntityTypeUseCase.Execute(type);
+        
+        bool isOnSceneActiveEntitiesList = entitiesSceneData.SceneActiveEntities.Contains(entity);
+        bool isOnSceneRootEntitiesList = entitiesSceneData.RootSceneEntities.Contains(entity);
+
+        bool shouldBeAddedToSceneActiveEntitiesList = entity is { IsActiveInHierachy: true, IsOnScene: true } && !isOnSceneActiveEntitiesList;
         
         if (shouldBeAddedToSceneActiveEntitiesList)
         {
-            _sceneEntitiesData.SceneActiveEntities.Add(entity);
+            entitiesSceneData.SceneActiveEntities.Add(entity);
         }
 
-        bool shouldBeAddedToSceneActiveRootEntitiesList = entity is { IsOnScene: true, Parent.HasValue: false } && !isOnSceneRootEntitiesList;
+        bool shouldBeAddedToSceneActiveRootEntitiesList = entity is { IsOnScene: true, HasParent: false } && !isOnSceneRootEntitiesList;
 
         if (shouldBeAddedToSceneActiveRootEntitiesList)
         {
-            _sceneEntitiesData.RootSceneEntities.Add(entity);
+            entitiesSceneData.RootSceneEntities.Add(entity);
         }
         
-        bool shouldBeRemovedFromSceneActiveEntitiesList = (!entity.ActiveInHierachy || !entity.IsOnScene) && isOnSceneActiveEntitiesList;
+        bool shouldBeRemovedFromSceneActiveEntitiesList = (!entity.IsActiveInHierachy || !entity.IsOnScene) && isOnSceneActiveEntitiesList;
         
         if(shouldBeRemovedFromSceneActiveEntitiesList)
         {
-            _sceneEntitiesData.SceneActiveEntities.Remove(entity);
+            entitiesSceneData.SceneActiveEntities.Remove(entity);
         }
 
-        bool shouldBeRemovedFromSceneRootEntitiesList = (!entity.IsOnScene || entity.Parent.HasValue) && isOnSceneRootEntitiesList;
+        bool shouldBeRemovedFromSceneRootEntitiesList = (!entity.IsOnScene || entity.HasParent) && isOnSceneRootEntitiesList;
 
         if (shouldBeRemovedFromSceneRootEntitiesList)
         {
-            _sceneEntitiesData.RootSceneEntities.Remove(entity);
+            entitiesSceneData.RootSceneEntities.Remove(entity);
         }
     }
 }

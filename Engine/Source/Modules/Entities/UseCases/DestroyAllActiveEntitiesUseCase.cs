@@ -5,25 +5,28 @@ namespace GEngine.Modules.Entities.UseCases;
 
 public sealed class DestroyAllActiveEntitiesUseCase
 {
-    readonly SceneEntitiesData _sceneEntitiesData;
+    readonly SceneData _sceneData;
     readonly DestroyEntityUseCase _destroyEntityUseCase;
 
     public DestroyAllActiveEntitiesUseCase(
-        SceneEntitiesData sceneEntitiesData, 
+        SceneData sceneData, 
         DestroyEntityUseCase destroyEntityUseCase
         )
     {
-        _sceneEntitiesData = sceneEntitiesData;
+        _sceneData = sceneData;
         _destroyEntityUseCase = destroyEntityUseCase;
     }
 
     public void Execute()
     {
-        for (int i = _sceneEntitiesData.RootSceneEntities.Count - 1; i >= 0; --i)
+        foreach (EntitiesSceneData entitiesSceneData in _sceneData.SceneDataByEntityType.Values)
         {
-            Entity entity = _sceneEntitiesData.RootSceneEntities[i];
+            for (int i = entitiesSceneData.RootSceneEntities.Count - 1; i >= 0; --i)
+            {
+                IEntity entity = entitiesSceneData.RootSceneEntities[i];
             
-            _destroyEntityUseCase.Execute(entity);
+                _destroyEntityUseCase.Execute(entity);
+            }   
         }
     }
 }

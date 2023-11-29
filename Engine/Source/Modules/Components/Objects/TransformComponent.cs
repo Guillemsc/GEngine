@@ -7,7 +7,7 @@ using GEngine.Utils.Optionals;
 
 namespace GEngine.Modules.Components.Objects;
 
-public sealed class TransformComponent : Component
+public sealed class TransformComponent : WorldComponent
 {
     public Matrix4x4 LocalMatrix { get; private set; } = Matrix4x4.Identity;
     public Matrix4x4 WorldMatrix { get; private set; } = Matrix4x4.Identity;
@@ -24,8 +24,14 @@ public sealed class TransformComponent : Component
     public Vector3 WorldRotationDegrees { get; private set; }
     public Vector3 WorldScale { get; private set; } = Vector3.One;
     
-    public TransformComponent(IREngineInteractor engine, Guid uid, Entity owner) : base(engine, uid, owner)
+    public TransformComponent(IREngineInteractor engine, Guid uid, BaseEntity<WorldComponent> owner) : base(engine, uid, owner)
     {
+        RefreshLocalMatrix();
+    }
+
+    public override void ParentChanged()
+    {
+        RecalculateChildHirearchyTransformValues(false);
     }
 
     public void SetLocalPosition(Vector3 position)
@@ -257,14 +263,16 @@ public sealed class TransformComponent : Component
 
     public Optional<TransformComponent> GetParentTransformComponent()
     {
-        bool hasParent = Owner.Parent.TryGet(out Entity parentEntity);
+        bool hasParent = Owner.Parent.TryGet(out BaseEntity<WorldComponent> parentEntity);
 
         if (!hasParent)
         {
             return Optional<TransformComponent>.None;
         }
 
-        return parentEntity.Transform;
+        WorldEntity parentWorldEntity = (WorldEntity)parentEntity;
+
+        return parentWorldEntity.Transform;
     }
 
     public Matrix4x4 TransformToLocalSpace(TransformComponent transformComponent)
@@ -429,11 +437,13 @@ public sealed class TransformComponent : Component
 
     void RecalculateChildHirearchyTransformValues(bool byPhysics)
     {
-        IEnumerable<Entity> childEntities = Owner.GetChildEntitiesOnHierarchy(true);
+        IEnumerable<IEntity> childEntities = Owner.GetChildEntitiesOnHierarchy(true);
 
-        foreach (Entity childEntity in childEntities)
+        foreach (IEntity childEntity in childEntities)
         {
-            childEntity.Transform.RecalculateWorldValues(byPhysics);
+            WorldEntity castedChildEntity = (WorldEntity)childEntity;
+            
+            castedChildEntity.Transform.RecalculateWorldValues(byPhysics);
         }
     }
 
@@ -493,7 +503,7 @@ public sealed class TransformComponent : Component
 
     void NotifyComponentsTransformChanged(bool byPhysics)
     {
-        foreach (Component component in Owner.Components)
+        foreach (WorldComponent component in Owner.Components)
         {
             if (component is INotifyTransformChanged notifyTransformChanged)
             {

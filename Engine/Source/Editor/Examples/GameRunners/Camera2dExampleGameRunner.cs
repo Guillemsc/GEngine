@@ -9,8 +9,8 @@ namespace GEngine.Editor.Examples.GameRunners
 {
     public class Camera2dExampleGameRunner : GameRunner
     {
-        Entity? _entity1;
-        Entity? _camera;
+        WorldEntity? _entity1;
+        WorldEntity? _camera;
 
         
         public Camera2dExampleGameRunner(IREngineInteractor engine) : base(engine)
@@ -20,8 +20,8 @@ namespace GEngine.Editor.Examples.GameRunners
 
         public override void Start()
         {
-            _entity1 = Entities.Create("Entity");
-            _camera = Entities.Create("Camera");
+            _entity1 = Entities.CreateWorld("Entity");
+            _camera = Entities.CreateWorld("Camera");
 
             CircleRenderer2dComponent circle1 = _entity1.AddComponent<CircleRenderer2dComponent>();
             circle1.SetColor(Color.PINK);

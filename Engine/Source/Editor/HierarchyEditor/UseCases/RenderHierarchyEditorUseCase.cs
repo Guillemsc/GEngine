@@ -1,4 +1,5 @@
 using GEngine.Editor.HierarchyEditor.Data;
+using GEngine.Modules.Components.Objects;
 using GEngine.Modules.Entities.Objects;
 using GEngine.Modules.Entities.UseCases;
 using ImGuiNET;
@@ -8,15 +9,15 @@ namespace GEngine.Editor.HierarchyEditor.UseCases;
 public sealed class RenderHierarchyEditorUseCase
 {
     readonly HierarchyEditorData _hierarchyEditorData;
-    readonly GetRootActiveEntitiesUseCase _getRootActiveEntitiesUseCase;
+    readonly GetRootSceneActiveEntitiesUseCase _getRootSceneActiveEntitiesUseCase;
 
     public RenderHierarchyEditorUseCase(
         HierarchyEditorData hierarchyEditorData,
-        GetRootActiveEntitiesUseCase getRootActiveEntitiesUseCase
+        GetRootSceneActiveEntitiesUseCase getRootSceneActiveEntitiesUseCase
     )
     {
         _hierarchyEditorData = hierarchyEditorData;
-        _getRootActiveEntitiesUseCase = getRootActiveEntitiesUseCase;
+        _getRootSceneActiveEntitiesUseCase = getRootSceneActiveEntitiesUseCase;
     }
 
     public void Execute()
@@ -28,28 +29,41 @@ public sealed class RenderHierarchyEditorUseCase
         
         if (ImGui.Begin("Hierarchy", ref _hierarchyEditorData.Active))
         {
-            // int entitiesCount = _getActiveEntitiesUseCase.Execute().Count;
-            //
-            // ImGui.Text($"Entities: {entitiesCount}");
+            ImGui.Text($"World:");
             
-            IReadOnlyList<Entity> rootActiveEntities = _getRootActiveEntitiesUseCase.Execute();
+            IReadOnlyList<IEntity> worldEntities = _getRootSceneActiveEntitiesUseCase.Execute<WorldEntity>();
             
-            foreach (Entity entity in rootActiveEntities)
+            foreach (IEntity entity in worldEntities)
             {
-                DrawEntity(entity);
+                WorldEntity castedEntity = (WorldEntity)entity;
+                
+                DrawEntity(castedEntity);
+            }
+            
+            ImGui.Separator();
+            
+            ImGui.Text($"Ui:");
+            
+            IReadOnlyList<IEntity> uiEntities = _getRootSceneActiveEntitiesUseCase.Execute<UiEntity>();
+            
+            foreach (IEntity entity in uiEntities)
+            {
+                UiEntity castedEntity = (UiEntity)entity;
+                
+                DrawEntity(castedEntity);
             }
 
             ImGui.End();
         }
     }
 
-    void DrawEntity(Entity entity)
+    void DrawEntity<T>(BaseEntity<T> entity) where T : Component
     {
         ImGuiTreeNodeFlags flags = entity.Children.Count == 0 ? ImGuiTreeNodeFlags.Leaf : ImGuiTreeNodeFlags.None;
         
         if (ImGui.TreeNodeEx(entity.Name, flags))
         {
-            foreach (Entity childEntity in entity.Children)
+            foreach (BaseEntity<T> childEntity in entity.Children)
             {
                 DrawEntity(childEntity);
             }

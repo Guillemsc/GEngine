@@ -5,26 +5,32 @@ namespace GEngine.Modules.Entities.Interactors;
 
 public sealed class EntitiesInteractor : IEntitiesInteractor
 {
-    readonly CreateEntityUseCase _createEntityUseCase;
-    readonly CreateEntityWithParentUseCase _createEntityWithParentUseCase;
+    readonly CreateWorldEntityUseCase _createWorldEntityUseCase;
+    readonly CreateWorldEntityWithParentUseCase _createWorldEntityWithParentUseCase;
+    readonly CreateUiEntityUseCase _createUiEntityUseCase;
     readonly DestroyAllActiveEntitiesUseCase _destroyAllActiveEntitiesUseCase;
 
     public EntitiesInteractor(
-        CreateEntityUseCase createEntityUseCase, 
-        CreateEntityWithParentUseCase createEntityWithParentUseCase,
+        CreateWorldEntityUseCase createWorldEntityUseCase, 
+        CreateWorldEntityWithParentUseCase createWorldEntityWithParentUseCase,
+        CreateUiEntityUseCase createUiEntityUseCase,
         DestroyAllActiveEntitiesUseCase destroyAllActiveEntitiesUseCase
         )
     {
-        _createEntityUseCase = createEntityUseCase;
+        _createWorldEntityUseCase = createWorldEntityUseCase;
         _destroyAllActiveEntitiesUseCase = destroyAllActiveEntitiesUseCase;
-        _createEntityWithParentUseCase = createEntityWithParentUseCase;
+        _createUiEntityUseCase = createUiEntityUseCase;
+        _createWorldEntityWithParentUseCase = createWorldEntityWithParentUseCase;
     }
 
-    public Entity Create(string name, bool active = true)
-        => _createEntityUseCase.Execute(name);
+    public WorldEntity CreateWorld(string name, bool active = true)
+        => _createWorldEntityUseCase.Execute(name);
 
-    public Entity Create(string name, Entity parent, bool active = true)
-        => _createEntityWithParentUseCase.Execute(name, parent, active);
+    public WorldEntity CreateWorld(string name, WorldEntity parent, bool active = true)
+        => _createWorldEntityWithParentUseCase.Execute(name, parent, active);
+
+    public UiEntity CreateUi(string name, bool active = true)
+        => _createUiEntityUseCase.Execute(name, active);
 
     public void DestroyAllActive()
         => _destroyAllActiveEntitiesUseCase.Execute();

@@ -12,23 +12,31 @@ public static class EntitiesInstaller
     {
         builder.Bind<IEntitiesInteractor>()
             .FromFunction(c => new EntitiesInteractor(
-                c.Resolve<CreateEntityUseCase>(),
-                c.Resolve<CreateEntityWithParentUseCase>(),
+                c.Resolve<CreateWorldEntityUseCase>(),
+                c.Resolve<CreateWorldEntityWithParentUseCase>(),
+                c.Resolve<CreateUiEntityUseCase>(),
                 c.Resolve<DestroyAllActiveEntitiesUseCase>()
             ));
 
-        builder.Bind<SceneEntitiesData>().FromNew();
+        builder.Bind<SceneData>().FromNew();
         
-        builder.Bind<CreateEntityUseCase>()
-            .FromFunction(c => new CreateEntityUseCase(
+        builder.Bind<CreateWorldEntityUseCase>()
+            .FromFunction(c => new CreateWorldEntityUseCase(
                 c.LazyResolve<IREngineInteractor>(),
                 c.Resolve<RefreshEntityOnSceneUseCase>(),
                 c.Resolve<RefreshEntityOnActiveEntitiesListsUseCase>()
             ));
 
-        builder.Bind<CreateEntityWithParentUseCase>()
-            .FromFunction(c => new CreateEntityWithParentUseCase(
-                c.Resolve<CreateEntityUseCase>()
+        builder.Bind<CreateWorldEntityWithParentUseCase>()
+            .FromFunction(c => new CreateWorldEntityWithParentUseCase(
+                c.Resolve<CreateWorldEntityUseCase>()
+            ));
+
+        builder.Bind<CreateUiEntityUseCase>()
+            .FromFunction(c => new CreateUiEntityUseCase(
+                c.LazyResolve<IREngineInteractor>(),
+                c.Resolve<RefreshEntityOnSceneUseCase>(),
+                c.Resolve<RefreshEntityOnActiveEntitiesListsUseCase>()
             ));
 
         builder.Bind<DestroyEntityUseCase>()
@@ -36,24 +44,24 @@ public static class EntitiesInstaller
 
         builder.Bind<DestroyAllActiveEntitiesUseCase>()
             .FromFunction(c => new DestroyAllActiveEntitiesUseCase(
-                c.Resolve<SceneEntitiesData>(),
+                c.Resolve<SceneData>(),
                 c.Resolve<DestroyEntityUseCase>()
             ));
 
         builder.Bind<RefreshEntityOnSceneUseCase>()
             .FromFunction(c => new RefreshEntityOnSceneUseCase(
-                c.Resolve<SceneEntitiesData>(),
-                c.Resolve<RefreshEntityOnActiveEntitiesListsUseCase>()
+                c.Resolve<RefreshEntityOnActiveEntitiesListsUseCase>(),
+                c.Resolve<GetSceneDataForEntityTypeUseCase>()
             ));
         
         builder.Bind<RefreshEntityOnActiveEntitiesListsUseCase>()
             .FromFunction(c => new RefreshEntityOnActiveEntitiesListsUseCase(
-                c.Resolve<SceneEntitiesData>()
+                c.Resolve<GetSceneDataForEntityTypeUseCase>()
             ));
 
-        builder.Bind<GetRootActiveEntitiesUseCase>()
-            .FromFunction(c => new GetRootActiveEntitiesUseCase(
-                c.Resolve<SceneEntitiesData>()
+        builder.Bind<GetRootSceneActiveEntitiesUseCase>()
+            .FromFunction(c => new GetRootSceneActiveEntitiesUseCase(
+                c.Resolve<SceneData>()
             ));
 
         builder.Bind<TickEntitiesUseCase>()
@@ -63,7 +71,12 @@ public static class EntitiesInstaller
 
         builder.Bind<TickActiveEntitiesUseCase>()
             .FromFunction(c => new TickActiveEntitiesUseCase(
-                c.Resolve<SceneEntitiesData>()
+                c.Resolve<SceneData>()
+            ));
+
+        builder.Bind<GetSceneDataForEntityTypeUseCase>()
+            .FromFunction(c => new GetSceneDataForEntityTypeUseCase(
+                c.Resolve<SceneData>()
             ));
     }
 }

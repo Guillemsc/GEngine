@@ -15,7 +15,7 @@ namespace Game
             
             engine.Modes.SetEngineMode(EngineModeType.Debug);
 
-            Pong2dExampleGameRunner transformPositionExampleGameRunner = new Pong2dExampleGameRunner(engine);
+            UiExampleGameRunner transformPositionExampleGameRunner = new UiExampleGameRunner(engine);
             engine.Games.Load(transformPositionExampleGameRunner);
 
             while (!engine.Windows.IsCloseWindowRequested())

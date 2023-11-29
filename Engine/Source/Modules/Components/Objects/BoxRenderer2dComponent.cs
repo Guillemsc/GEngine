@@ -6,7 +6,7 @@ using GEngine.Utils.Extensions;
 
 namespace GEngine.Modules.Components.Objects;
 
-public sealed class BoxRenderer2dComponent : Component
+public sealed class BoxRenderer2dComponent : WorldComponent
 {
     public int SortingOrder { get; private set; }
 
@@ -14,7 +14,7 @@ public sealed class BoxRenderer2dComponent : Component
     public Vector2 Size { get; private set; } = new(20, 20);
     public Color Color { get; private set; } = Color.PINK;
     
-    public BoxRenderer2dComponent(IREngineInteractor engine, Guid uid, Entity owner) : base(engine, uid, owner)
+    public BoxRenderer2dComponent(IREngineInteractor engine, Guid uid, BaseEntity<WorldComponent> owner) : base(engine, uid, owner)
     {
     }
     

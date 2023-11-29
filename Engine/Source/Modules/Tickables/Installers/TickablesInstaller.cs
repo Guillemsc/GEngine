@@ -5,6 +5,7 @@ using GEngine.Modules.Rendering.UseCases;
 using GEngine.Modules.Tickables.Data;
 using GEngine.Modules.Tickables.Interactors;
 using GEngine.Modules.Tickables.UseCases;
+using GEngine.Modules.Windows.UseCases;
 using GEngine.Utils.Di.Builder;
 
 namespace GEngine.Modules.Tickables.Installers;
@@ -45,6 +46,7 @@ public static class TickablesInstaller
         builder.Bind<TickUseCase>()
             .FromFunction(c => new TickUseCase(
                 c.Resolve<TickFramerateUseCase>(),
+                c.Resolve<TickWindowsUseCase>(),
                 c.Resolve<TickEntitiesUseCase>(),
                 c.Resolve<TickTickablesUseCase>(),
                 c.Resolve<TickPhysics2dUseCase>(),

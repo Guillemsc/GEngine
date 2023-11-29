@@ -7,14 +7,14 @@ using Raylib_cs;
 
 namespace GEngine.Modules.Components.Objects;
 
-public sealed class Camera2dComponent : Component
+public sealed class Camera2dComponent : WorldComponent
 {
     public Camera2d Camera2d { get; } = new();
     
     public Color ClearColor { get; private set; } = Color.WHITE;
     public float Size { get; private set; } = 1f;
     
-    public Camera2dComponent(IREngineInteractor engine, Guid uid, Entity owner) : base(engine, uid, owner)
+    public Camera2dComponent(IREngineInteractor engine, Guid uid, BaseEntity<WorldComponent> owner) : base(engine, uid, owner)
     {
         
     }
